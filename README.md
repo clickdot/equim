@@ -1,4 +1,4 @@
-# Equim miner CLI guide
+# Equium miner CLI guide
 
 [![GitHub stars](https://img.shields.io/github/stars/clickdot/equim?style=social)](https://github.com/clickdot/equim)
 
