@@ -1,6 +1,5 @@
-# equim
 
-equim miner CLI guide
+# Equim miner CLI guide
 
 ## What is Equium?
 
