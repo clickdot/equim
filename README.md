@@ -1,8 +1,7 @@
-# equim
+# Equim miner CLI guide
 
 [![GitHub stars](https://img.shields.io/github/stars/clickdot/equim?style=social)](https://github.com/clickdot/equim)
 
-**equim miner CLI guide**
 
 ## What is Equium?
 
