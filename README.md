@@ -1,5 +1,8 @@
+# equim
 
-# Equim miner CLI guide
+[![GitHub stars](https://img.shields.io/github/stars/clickdot/equim?style=social)](https://github.com/clickdot/equim)
+
+**equim miner CLI guide**
 
 ## What is Equium?
 
@@ -21,7 +24,7 @@ Mined EQM lands automatically in your wallet's associated token account. You nee
 - Linux (Ubuntu recommended), macOS, or Windows (with WSL for CLI)
 - For VPS/headless: A basic CPU VPS works well (more cores = higher chance of winning blocks)
 - Small amount of SOL for fees (~0.001 SOL per successful block or less)
-- Optional but recommended: [Helius RPC API key](https://www.helius.dev) (free tier available) for reliable mining
+- **Recommended:** [Helius RPC API key](https://www.helius.dev) (free tier available) for reliable mining and better performance
 
 ## Mining Options
 
@@ -38,7 +41,7 @@ Mined EQM lands automatically in your wallet's associated token account. You nee
 1. Download from [equium.xyz/download](https://equium.xyz/download) (macOS/Windows/Linux)
 2. Install and run
 3. Set up an encrypted local wallet (Argon2id + AES-256-GCM)
-4. Add your Helius RPC URL if desired
+4. Add your [Helius RPC URL](https://www.helius.dev) if desired
 5. Start mining
 
 **Best for:** User-friendly GUI and good for steady mining.
@@ -88,11 +91,21 @@ source ~/.bashrc
 solana --version
 ```
 
-### 4. Switch RPC
+### 4. Set Up Helius RPC (Recommended)
+
+Get a free [Helius RPC API key](https://www.helius.dev) for better reliability and performance. Then configure it:
+
+```bash
+solana config set --url https://mainnet.helius-rpc.com/?api-key=YOUR_HELIUS_KEY
+```
+
+**Alternatively**, use the public RPC:
 
 ```bash
 solana config set --url https://api.mainnet-beta.solana.com
 ```
+
+> **Note:** Helius is recommended to avoid rate limiting during mining.
 
 ## Wallet CLI Setup
 
@@ -147,7 +160,7 @@ Use screen for background running:
 screen -S equium
 ```
 
-Then start mining:
+Then start mining with your Helius API key:
 
 ```bash
 ./target/release/equium-miner \
@@ -170,27 +183,59 @@ round #42   reward 25 EQM   target 0x10ffff…
 
 ## Tips for Better Performance
 
-- Use a good RPC ([Helius](https://www.helius.dev) free key recommended to avoid rate limits)
-- More CPU cores generally improve your share of blocks (difficulty adjusts network-wide)
-- Monitor hashrate in the logs (e.g., H/s)
+- **Get a Helius API key:** Sign up for free at [Helius](https://www.helius.dev) to avoid rate limiting
+- **Monitor hashrate:** Look for `H/s` (hashes per second) in your miner logs to track performance
+- **More CPU cores:** Increase your chances of winning blocks with better hardware
+- **Close unnecessary apps:** Ensure you're not memory-constrained; dedicate system resources to mining
+- Difficulty adjusts network-wide, so your earnings scale with CPU power and uptime
 
 ## Useful Commands & Monitoring
 
-- **Check balance:** Use [Solscan](https://solscan.io) or your wallet (search by mint address)
+### Monitor Mining Activity
+
+Check live logs from your screen session:
+
+```bash
+screen -r equium
+```
+
+Watch for messages like:
+- `MINED!` — You won a block (check logs for reward amount)
+- `H/s` — Your current hashrate
+- `round #N` — The current mining round
+
+### Check Balance
+
+Use [Solscan](https://solscan.io) or your wallet to check your EQM balance (search by mint address `1MhvZzEe8gQ8Rb9CrT3Dn26Gkn9QRErzLMGkkTwveqm`).
+
+### Miner Management
+
 - **Stop miner:** `Ctrl+C` inside the screen session
 - **List screens:** `screen -ls`
 - **Kill screen:** `screen -XS equium quit`
-- **Update miner:** Pull latest from repo and rebuild
+
+### Update the Miner
+
+Pull the latest version from the repository and rebuild:
+
+```bash
+cd equium
+git pull
+cargo build -p equium-cli-miner --release
+```
+
+Then restart your miner with the new binary.
 
 ## Troubleshooting
 
 | Issue | Solution |
 |-------|----------|
-| **Rate limits** | Switch to a private RPC like [Helius](https://www.helius.dev) |
+| **Rate limits** | Get a free [Helius API key](https://www.helius.dev) and use it in your miner command |
 | **No blocks won** | Normal — it's probabilistic. Your earnings scale with CPU power and uptime |
-| **Low hashrate** | Ensure you're not memory-constrained; close other apps |
-| **Transaction failures** | Ensure wallet has SOL for fees |
+| **Low hashrate** | Ensure you're not memory-constrained; close other apps and check CPU usage |
+| **Transaction failures** | Ensure wallet has enough SOL for transaction fees (~0.001 SOL per block) |
 | **solana: command not found** | Add Solana to PATH: `echo 'export PATH="/root/.local/share/solana/install/active_release/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc` |
+| **RPC connection errors** | Switch to [Helius RPC](https://www.helius.dev) or verify your RPC URL |
 | **General issues** | Check official docs at [equium.xyz/docs](https://equium.xyz/docs) for RPC setup, protocol details, etc. |
 
 ## Security & Best Practices
@@ -200,10 +245,13 @@ round #42   reward 25 EQM   target 0x10ffff…
 - Use a dedicated wallet for mining
 - For production, run on a VPS with good uptime and monitor temperatures/power
 - Mining profitability is not guaranteed — treat it as an experiment
+- Store private keys securely and use strong passwords
 
 ## Additional Resources
 
 - **Official Site:** [equium.xyz](https://equium.xyz)
+- **Documentation:** [equium.xyz/docs](https://equium.xyz/docs)
 - **GitHub:** [HannaPrints/equium](https://github.com/HannaPrints/equium)
 - **X (Twitter):** [@EquiumEQM](https://twitter.com/EquiumEQM)
 - **Explorer:** [Solscan](https://solscan.io) or [Solana Explorer](https://explorer.solana.com) (use the program ID for on-chain info)
+- **RPC Provider:** [Helius](https://www.helius.dev) (free tier available)
