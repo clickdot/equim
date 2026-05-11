@@ -48,21 +48,89 @@ Mined EQM lands automatically in your wallet's associated token account. You nee
 
 This is the headless, efficient option.
 
-#### Install Dependencies (Ubuntu/Debian example)
+## Install Dependencies
+
+### 1. Install Packages
 
 ```bash
 sudo apt-get update && sudo apt-get upgrade -y
-sudo apt install screen curl build-essential pkg-config libssl-dev -y
+sudo apt install screen curl nano -y
 ```
 
-#### Install Rust
+### 2. Install Rust
 
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+When prompted, enter `1` and wait until installation is complete.
+
+```bash
 source $HOME/.cargo/env
 ```
 
-#### Clone and Build the Miner
+### 3. Install Solana CLI
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSfL https://solana-install.solana.workers.dev | bash
+```
+
+Close and reopen your Terminal, then verify the installation:
+
+```bash
+solana --version
+```
+
+If you get `solana: command not found`, run:
+
+```bash
+echo 'export PATH="/root/.local/share/solana/install/active_release/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+solana --version
+```
+
+### 4. Switch RPC
+
+```bash
+solana config set --url https://api.mainnet-beta.solana.com
+```
+
+## Wallet CLI Setup
+
+### 1. Create a CLI Wallet
+
+```bash
+solana-keygen new
+```
+
+- Set a password or skip by pressing Enter
+- **Save your Seed-Phrase & Public-Key**
+  - **Public-Key:** Is your node's Solana wallet address
+
+### 2. Export Private Key
+
+**Find Keypair path:**
+
+```bash
+solana config get
+```
+
+This gives your Keypair path like: `~/.config/solana/id.json`
+
+**Export Private Key:**
+
+```bash
+cat ~/.config/solana/id.json
+```
+
+The exported array is your Private-Key. **Save it securely.**
+
+### 3. Import and Fund Node Wallet
+
+1. Import your Private-Key into your Solana wallet
+2. Fund it with SOL on the Solana network
+
+## Clone and Build the Miner
 
 ```bash
 git clone https://github.com/HannaPrints/equium.git
@@ -72,23 +140,7 @@ cargo build -p equium-cli-miner --release
 
 The binary will be at `./target/release/equium-miner`.
 
-#### Create/Fund a Solana Wallet (CLI)
-
-```bash
-solana-keygen new
-# Save your seed phrase and public key (wallet address)
-```
-
-Export private key if needed (for import into other wallets):
-
-```bash
-solana config get  # Note the keypair path, usually ~/.config/solana/id.json
-cat ~/.config/solana/id.json
-```
-
-Fund the wallet with a small amount of SOL on Solana mainnet.
-
-#### Run the Miner
+## Run the Miner
 
 Use screen for background running:
 
@@ -104,6 +156,7 @@ Then start mining:
   --keypair ~/.config/solana/id.json
 ```
 
+**Screen Commands:**
 - Omit `--max-blocks N` to run indefinitely
 - Use `Ctrl+A+D` to detach the screen
 - Re-attach: `screen -r equium`
@@ -138,6 +191,7 @@ round #42   reward 25 EQM   target 0x10ffff…
 | **No blocks won** | Normal — it's probabilistic. Your earnings scale with CPU power and uptime |
 | **Low hashrate** | Ensure you're not memory-constrained; close other apps |
 | **Transaction failures** | Ensure wallet has SOL for fees |
+| **solana: command not found** | Add Solana to PATH: `echo 'export PATH="/root/.local/share/solana/install/active_release/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc` |
 | **General issues** | Check official docs at equium.xyz/docs for RPC setup, protocol details, etc. |
 
 ## Security & Best Practices
